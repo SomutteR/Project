@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cow Health Monitoring Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+        }
+        .card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        canvas {
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Cow Health Monitoring Dashboard</h1>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>Real-time Data</h2>
+            <p>Date-Time: <span id="datetime">Loading...</span></p>
+            <p>Temperature: <span id="temperature">Loading...</span> °C</p>
+            <p>X: <span id="x">Loading...</span></p>
+            <p>Y: <span id="y">Loading...</span></p>
+            <p>Z: <span id="z">Loading...</span></p>
+        </div>
+        <div class="card">
+            <h2>Temperature Trend</h2>
+            <canvas id="temperatureChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>Activity Trend</h2>
+            <canvas id="activityChart"></canvas>
+        </div>
+    </div>
+    <script>
+        let temperatureData = [];
+        let activityData = [];
+        let labels = [];
+
+        // Fetch the real-time data from Flask server
+        async function fetchData() {
+            try {
+                let response = await fetch('/get_data');
+                let data = await response.json();
+
+                // Update the real-time data section
+                document.getElementById('datetime').innerText = data.datetime;
+                document.getElementById('temperature').innerText = data.temperature;
+                document.getElementById('x').innerText = data.x;
+                document.getElementById('y').innerText = data.y;
+                document.getElementById('z').innerText = data.z;
+
+                // Update the chart data
+                labels.push(data.datetime);
+                temperatureData.push(data.temperature);
+                activityData.push(Math.sqrt(data.x * data.x + data.y * data.y + data.z * data.z));
+
+                // Keep only the latest 10 data points
+                if (labels.length > 10) {
+                    labels.shift();
+                    temperatureData.shift();
+                    activityData.shift();
+                }
+
+                updateCharts();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Fetch the data every 10 seconds
+        setInterval(fetchData, 10000);
+        fetchData(); // Initial fetch
+
+        // Initialize the charts
+        const temperatureChartCtx = document.getElementById('temperatureChart').getContext('2d');
+        const activityChartCtx = document.getElementById('activityChart').getContext('2d');
+
+        const temperatureChart = new Chart(temperatureChartCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: temperatureData,
+                    borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Time'
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Temperature (°C)'
+                        }
+                    }
+                }
+            }
+        });
+
+        const activityChart = new Chart(activityChartCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Activity Level',
+                    data: activityData,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Time'
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Activity Level'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Function to update the charts with new data
+        function updateCharts() {
+            temperatureChart.update();
+            activityChart.update();
+        }
+    </script>
+</body>
+</html>
+
+
+    
