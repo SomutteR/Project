@@ -3,177 +3,525 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cow Health Monitoring Dashboard</title>
+    <title>Cow Health Monitoring System</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: url('bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #E0E0E0;
             margin: 0;
             padding: 0;
         }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
+       
+        .menu-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .menu-button {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: rgb(255, 255, 255);
+            padding: 0.5rem 1rem;
+            background: #333;
+            border: none;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+        .menu-button:hover {
+            background: #555;
+        }
+        .nav-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #222;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            z-index: 1000;
+        }
+        .menu-container:hover .nav-menu {
+            display: block;
+        }
+        .nav-menu a {
+            color: #E0E0E0;
+            text-decoration: none;
+            display: block;
+            padding: 10px 20px;
+            transition: background 0.3s ease;
+        }
+        .nav-menu a:hover {
+            background: #444;
+        }
+        .nav-menu .submenu {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 100%;
+            background: #333;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            z-index: 1000;
+        }
+        .nav-menu .submenu a {
+            padding: 10px;
+        }
+        .nav-menu a.has-submenu:hover + .submenu,
+        .submenu:hover {
+            display: block;
         }
         .container {
             padding: 20px;
         }
+        .welcome-message {
+            font-size: 3rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 900;
+            background: linear-gradient(45deg, #0ce005, #eb0d0d, #442be9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin: 30px;
+            padding: 10px 0;
+            display: inline-block;
+            border-bottom: 3px solid #BB86FC;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(234, 17, 17, 0.798);
+            text-align: center;
+            width: 100%;
+        }
+        .hidden {
+            display: none;
+        }
         .card {
-            background-color: white;
-            border: 1px solid #ddd;
+            background-color: rgba(30, 30, 30, 0.9);
+            border: 1px solid #333;
             border-radius: 5px;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
+        }
+        .section h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #c70ad8;
+            margin: 0;
+            padding: 10px;
+            background: rgba(31, 31, 31, 0.8);
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .section h1 {
+            font-size: 2.5rem;
+            
+        }
+        h2 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #d80a0a;
+            margin: 0;
+            padding: 10px;
+            background: rgba(6, 5, 5, 0.891);
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(225, 4, 4, 0.872);
+            text-align: center;
         }
         canvas {
             height: 300px;
+            width: 500px;
+        }
+        h3 {
+            text-align: center;
+            color: #442be9;
+        }
+        footer {
+            text-align: center;
+            padding: 5px;
+            background-color: rgba(179, 249, 121, 0.9);
+            color: #f01919;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+        }
+        .social-icons a:hover {
+            color: #03DAC6;
+        }
+        .cow1-section-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .cow1-section-buttons button {
+            background-color: #444;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-size: 1.2rem;
+        }
+        .cow1-section-buttons button:hover {
+            background-color: #666;
+        }
+        .contact-form {
+            background-color: rgba(30, 30, 30, 0.9);
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            width: 50%;
+            margin-left: 25%;
+        }
+        .contact-form h2 {
+            color: #d80a0a;
+            margin-top: 0;
+            text-align: center;
+        }
+        .contact-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #E0E0E0;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .contact-form button {
+            background-color: #14012c;
+            color: #E0E0E0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: block;
             width: 100%;
         }
+        .contact-form button:hover {
+            background-color: #21fe33;
+        }
+        
+    #about {
+        background: rgba(10, 10, 10, 0.8); /* Dark background with opacity */
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    #about section {
+        margin-bottom: 20px;
+    }
+    #about h3 {
+        font-size: 1rem;
+        color: #00bcd4; /* Teal color for headings */
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid #00bcd4; /* Teal underline */
+    }
+    #about p {
+        line-height: 1.6;
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        margin-bottom: 15px;
+    }
+    #about ul {
+        list-style: disc;
+        margin-left: 20px;
+        color: #e0e0e0;
+    }
+    #about ul li {
+        margin-bottom: 10px;
+    }
+    #about h3 {
+        text-transform: uppercase;
+    }
+
+
     </style>
 </head>
 <body>
-    <header>
-        <h1>Cow Health Monitoring Dashboard</h1>
-    </header>
+   
+    <nav>
+        <div class="menu-container">
+            <button class="menu-button">Menu</button>
+            <div class="nav-menu">
+                <a href="#" onclick="showSection('home')">Home</a>
+                <a href="#" onclick="showSection('about')">About</a>
+                <a href="#" onclick="showSection('contact')">Contact Us</a>
+                <a href="#" onclick="showSection('cow1')">Cow 1</a>
+            </div>
+        </div>
+    </nav>
     <div class="container">
-        <div class="card">
-            <h2>Real-time Data</h2>
-            <p>Date-Time: <span id="datetime">Loading...</span></p>
-            <p>Temperature: <span id="temperature">Loading...</span> °C</p>
-            <p>X: <span id="x">Loading...</span></p>
-            <p>Y: <span id="y">Loading...</span></p>
-            <p>Z: <span id="z">Loading...</span></p>
+        <!-- Home Section -->
+        <div id="home" class="section home-background">
+            <div class="welcome-message">
+                Welcome to RT Dairy Farms!
+            </div>
         </div>
-        <div class="card">
-            <h2>Temperature Trend</h2>
-            <canvas id="temperatureChart"></canvas>
+        
+        <!-- About Section -->
+       
+        <!-- About Section -->
+<div id="about" class="section hidden">
+    <h2>About Us</h2>
+    <section>
+        <h3><b>Welcome to RT FARMS</b></h3>
+        <p>At RT Farms, our mission is to enhance the well-being of livestock and protect the environment through innovative technology and data-driven solutions. We understand that the health of cows and the state of their surroundings are closely interconnected, and our goal is to provide comprehensive tools and insights to support sustainable and efficient farming practices.</p>
+    </section>
+    <section>
+        <h3>Our Vision</h3>
+        <p>We envision a world where farmers and ranchers have access to real-time data and actionable insights that empower them to make informed decisions about their cattle and the environment. By integrating advanced sensors, AI, and analytics, we aim to create a seamless system that enhances animal welfare, optimizes farm operations, and promotes ecological sustainability.</p>
+    </section>
+    <section>
+        <h3>Our Approach</h3>
+        <ul>
+            <li><strong>Advanced Monitoring:</strong> We utilize cutting-edge technology to continuously monitor the health of cows and environmental conditions. Our solutions track vital parameters such as temperature, humidity, and activity levels, providing early warnings for potential health issues and environmental changes.</li>
+            <li><strong>Data-Driven Insights:</strong> Our platform analyzes data to deliver actionable insights and recommendations. From detecting signs of illness to assessing the impact of environmental factors, our data helps farmers make proactive decisions that improve both productivity and animal welfare.</li>
+            <li><strong>Sustainability Focus:</strong> We are committed to promoting sustainable agricultural practices. Our tools help reduce resource wastage, minimize environmental impact, and support practices that contribute to long-term ecological health.</li>
+        </ul>
+    </section>
+    <section>
+        <h3>Why Choose Us?</h3>
+        <ul>
+            <li><strong>Comprehensive Solutions:</strong> We offer an all-in-one platform that integrates health monitoring and environmental assessment, providing a holistic view of farm operations.</li>
+            <li><strong>User-Friendly Interface:</strong> Our technology is designed with the user in mind, ensuring ease of use and accessibility for farmers of all backgrounds.</li>
+            <li><strong>Commitment to Excellence:</strong> We are dedicated to continuous improvement and stay at the forefront of technological advancements to deliver the best possible solutions.</li>
+        </ul>
+    </section>
+</div>
+
+
+        <!-- Contact Us Section -->
+        <div id="contact" class="section hidden">
+            <h2>Contact Us</h2>
+            <div class="contact-form">
+                <h2>Get in Touch</h2>
+                <form >
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                    
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                    
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                    
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
         </div>
-        <div class="card">
-            <h2>Activity Trend</h2>
-            <canvas id="activityChart"></canvas>
+
+        <!-- Cow 1 Section -->
+        <div id="cow1" class="section hidden">
+            <h2>Cow 1 Monitoring Dashboard</h2>
+            <p>Select a section below to view details.</p>
+            <div class="cow1-section-buttons">
+                <button onclick="showCow1Section('realTimeData')">Real-time Data</button>
+                <button onclick="showCow1Section('temperatureTrend')">Temperature Trend</button>
+                <button onclick="showCow1Section('activityLevel')">Activity Level</button>
+                <button onclick="showCow1Section('alerts')">Alerts</button>
+                <button onclick="showCow1Section('notes')">Notes</button>
+            </div>
+            <div id="realTimeData" class="cow1-section hidden">
+                <div class="card">
+                    <h2>Real-time Data</h2>
+                    <p>Date-Time: <span id="datetime">Loading...</span></p>
+                    <p>Temperature: <span id="temperature">Loading...</span> °C</p>
+                    <p>X: <span id="x">Loading...</span></p>
+                    <p>Y: <span id="y">Loading...</span></p>
+                    <p>Z: <span id="z">Loading...</span></p>
+                </div>
+            </div>
+            <div id="temperatureTrend" class="cow1-section hidden">
+                <div class="card">
+                    <h2>Temperature Trend</h2>
+                    <canvas id="temperatureChart"></canvas>
+                </div>
+            </div>
+            <div id="activityLevel" class="cow1-section hidden">
+                <div class="card">
+                    <h2>Activity Level</h2>
+                    <canvas id="activityChart"></canvas>
+                </div>
+            </div>
+            <div id="alerts" class="cow1-section hidden">
+                <div class="card">
+                    <h2>Alerts</h2>
+                    <ul id="alertsList">
+                        <li>Alert 1: Example alert</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="notes" class="cow1-section hidden">
+                <div class="card">
+                    <h2>Notes</h2>
+                    <textarea id="notesTextarea" rows="5" style="width: 100%;" placeholder="Add your notes here..."></textarea>
+                </div>
+            </div>
         </div>
     </div>
-    <script>
-        let temperatureData = [];
-        let activityData = [];
-        let labels = [];
+    <footer>
+        <p>&copy; 2024 RT Dairy Farms. Follow us on:
+            <a href="https://facebook.com" target="_blank" class="fab fa-facebook-f"></a>&nbsp;&nbsp;&nbsp;
+            <a href="https://twitter.com" target="_blank" class="fab fa-twitter"></a>&nbsp;&nbsp;&nbsp;
+            <a href="https://instagram.com" target="_blank" class="fab fa-instagram"></a>&nbsp;&nbsp;&nbsp;
+        </p>
+    </footer>
 
-        // Fetch the real-time data from Flask server
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+    
+        function showCow1Section(sectionId) {
+            document.querySelectorAll('#cow1 .cow1-section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+    
+        let temperatureChart;
+        let activityChart;
+    
         async function fetchData() {
             try {
-                let response = await fetch('/get_data');
-                let data = await response.json();
-
-                // Update the real-time data section
-                document.getElementById('datetime').innerText = data.datetime;
-                document.getElementById('temperature').innerText = data.temperature;
-                document.getElementById('x').innerText = data.x;
-                document.getElementById('y').innerText = data.y;
-                document.getElementById('z').innerText = data.z;
-
-                // Update the chart data
-                labels.push(data.datetime);
-                temperatureData.push(data.temperature);
-                activityData.push(Math.sqrt(data.x * data.x + data.y * data.y + data.z * data.z));
-
-                // Keep only the latest 10 data points
-                if (labels.length > 10) {
-                    labels.shift();
-                    temperatureData.shift();
-                    activityData.shift();
-                }
-
-                updateCharts();
+                const response = await fetch('/get_data'); // Your actual endpoint
+                const data = await response.json();
+    
+                // Update real-time data display
+                document.getElementById('datetime').textContent = data.datetime;
+                document.getElementById('temperature').textContent = data.temperature;
+                document.getElementById('x').textContent = data.x;
+                document.getElementById('y').textContent = data.y;
+                document.getElementById('z').textContent = data.z;
+    
+                // Update alerts
+                updateAlerts(data);
+    
+                // Update charts
+                updateCharts(data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         }
-
-        // Fetch the data every 10 seconds
-        setInterval(fetchData, 10000);
-        fetchData(); // Initial fetch
-
-        // Initialize the charts
-        const temperatureChartCtx = document.getElementById('temperatureChart').getContext('2d');
-        const activityChartCtx = document.getElementById('activityChart').getContext('2d');
-
-        const temperatureChart = new Chart(temperatureChartCtx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Temperature (°C)',
-                    data: temperatureData,
-                    borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Time'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Temperature (°C)'
+    
+        function initializeCharts() {
+            const temperatureCtx = document.getElementById('temperatureChart').getContext('2d');
+            temperatureChart = new Chart(temperatureCtx, {
+                type: 'line',
+                data: {
+                    labels: [], // Initially empty
+                    datasets: [{
+                        label: 'Temperature',
+                        data: [],
+                        borderColor: '#BB86FC',
+                        backgroundColor: 'rgba(187, 134, 252, 0.2)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2) + ' °C';
+                                }
+                            }
                         }
                     }
                 }
-            }
-        });
-
-        const activityChart = new Chart(activityChartCtx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Activity Level',
-                    data: activityData,
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Time'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Activity Level'
+            });
+    
+            const activityCtx = document.getElementById('activityChart').getContext('2d');
+            activityChart = new Chart(activityCtx, {
+                type: 'line',
+                data: {
+                    labels: [], // Initially empty
+                    datasets: [{
+                        label: 'Activity Level',
+                        data: [],
+                        borderColor: '#03DAC6',
+                        backgroundColor: 'rgba(3, 218, 198, 0.2)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2);
+                                }
+                            }
                         }
                     }
                 }
-            }
-        });
-
-        // Function to update the charts with new data
-        function updateCharts() {
-            temperatureChart.update();
-            activityChart.update();
+            });
         }
+    
+        function updateCharts(data) {
+            try {
+                // Update temperature chart
+                temperatureChart.data.labels.push(data.datetime);
+                temperatureChart.data.datasets[0].data.push(data.temperature);
+                temperatureChart.update();
+    
+                // Update activity chart
+                activityChart.data.labels.push(data.datetime);
+                activityChart.data.datasets[0].data.push(data.x); // Placeholder for activity data
+                activityChart.update();
+            } catch (error) {
+                console.error('Error updating charts:', error);
+            }
+        }
+    
+        function updateAlerts(data) {
+            try {
+                const alertsList = document.getElementById('alertsList');
+                alertsList.innerHTML = ''; // Clear existing alerts
+    
+                // Check for high temperature and add alert if necessary
+                if (data.temperature > 28) {
+                    const alertItem = document.createElement('li');
+                    alertItem.textContent = `Alert: Temperature has exceeded 28°C at ${data.datetime}`;
+                    alertsList.appendChild(alertItem);
+                }
+            } catch (error) {
+                console.error('Error updating alerts:', error);
+            }
+        }
+    
+        // Initialize charts on page load
+        initializeCharts();
+    
+        // Fetch data initially
+        fetchData();
+    
+        // Update data periodically (e.g., every 10 seconds)
+        setInterval(fetchData, 10000); // Adjust the interval as needed
     </script>
+    
+    
 </body>
 </html>
 
-
-    
