@@ -31,7 +31,7 @@ def receive_data():
 print(f"Received data - X: {x}, Y: {y}, Z: {z}, Datetime: {datetime}, Temperature: {temperature}")
     return "Data received", 200
 
-@app.route('/get_data', methods=['GET']
+@app.route('/get_data', methods=['GET'])
 def get_data():
     return jsonify(data_storage)
 
