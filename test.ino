@@ -27,3 +27,29 @@ void setup() {
     Serial.println("Couldn't find ADXL345");
     while (1);
   }
+// Initialize DS3231 RTC
+  if (!rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    while (1);
+  }
+
+  // Uncomment this line if RTC time is not set, then comment it out after the time is set correctly
+   rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+
+  // Connect to Wi-Fi network
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
