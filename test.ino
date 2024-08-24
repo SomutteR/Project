@@ -88,3 +88,24 @@ void loop() {
 
     // Construct the server path with data query parameters
     String serverPath = String(serverName) + "?" + data;
+// Pass the WiFiClient object and the URL to the begin method
+    http.begin(client, serverPath);
+    http.setTimeout(5000); // Set timeout to 5 seconds
+
+    // Send HTTP GET request
+    int httpResponseCode = http.GET();
+
+    if (httpResponseCode > 0) {
+      Serial.print("HTTP Response code: ");
+      Serial.println(httpResponseCode);
+    } else {
+      Serial.print("Error code: ");
+      Serial.println(httpResponseCode);
+    }
+
+    // Free resources
+    http.end();
+  }
+
+  delay(10000); // Send data every 10 seconds
+}
