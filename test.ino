@@ -3,9 +3,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_ADXL345_U.h>
-#include <RTClib.h> // Library for DS3231 RTC
-
-// Replace with your Wi-Fi credentials
+#include <RTClib.h> 
 const char* ssid = "rahulA15";
 const char* password = "123456789";
 // Replace with your Flask server's IP address and port
