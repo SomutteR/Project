@@ -28,3 +28,12 @@ def receive_data():
         "y": y,
         "z": z
     }
+print(f"Received data - X: {x}, Y: {y}, Z: {z}, Datetime: {datetime}, Temperature: {temperature}")
+    return "Data received", 200
+
+@app.route('/get_data', methods=['GET'])
+def get_data():
+    return jsonify(data_storage)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5007)
