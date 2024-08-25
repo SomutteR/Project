@@ -6,10 +6,7 @@
 #include <RTClib.h> 
 const char* ssid = "rahulA15";
 const char* password = "123456789";
-// Replace with your Flask server's IP address and port
 const char* serverName = "http://192.168.0.94:5007/receive_data";
-
-// Create instances for sensors
 Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified();
 RTC_DS3231 rtc;
 
