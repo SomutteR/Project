@@ -56,16 +56,10 @@ void loop() {
                   "&z=" + String(event.acceleration.z) +
                   "&datetime=" + datetime +
                   "&temperature=" + String(temperature);
-
-    
     String serverPath = String(serverName) + "?" + data;
-
     http.begin(client, serverPath);
-    http.setTimeout(5000); // Set timeout to 5 seconds
-
-    // Send HTTP GET request
+    http.setTimeout(5000); 
     int httpResponseCode = http.GET();
-
     if (httpResponseCode > 0) {
       Serial.print("HTTP Response code: ");
       Serial.println(httpResponseCode);
@@ -73,10 +67,7 @@ void loop() {
       Serial.print("Error code: ");
       Serial.println(httpResponseCode);
     }
-
-    // Free resources
     http.end();
   }
-
-  delay(10000); // Send data every 10 seconds
+  delay(10000); 
 }
