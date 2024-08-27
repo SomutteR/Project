@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: url('bg.jpg') no-repeat center center fixed;
+            background: url(';static/images/bg.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #E0E0E0;
             margin: 0;
@@ -392,18 +392,12 @@
             try {
                 const response = await fetch('/get_data'); 
                 const data = await response.json();
-    
-                // Update real-time data display
                 document.getElementById('datetime').textContent = data.datetime;
                 document.getElementById('temperature').textContent = data.temperature;
                 document.getElementById('x').textContent = data.x;
                 document.getElementById('y').textContent = data.y;
                 document.getElementById('z').textContent = data.z;
-    
-                // Update alerts
                 updateAlerts(data);
-    
-                // Update charts
                 updateCharts(data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -415,7 +409,7 @@
             temperatureChart = new Chart(temperatureCtx, {
                 type: 'line',
                 data: {
-                    labels: [], // Initially empty
+                    labels: [], 
                     datasets: [{
                         label: 'Temperature',
                         data: [],
@@ -445,7 +439,7 @@
             activityChart = new Chart(activityCtx, {
                 type: 'line',
                 data: {
-                    labels: [], // Initially empty
+                    labels: [], 
                     datasets: [{
                         label: 'Activity Level',
                         data: [],
@@ -474,12 +468,9 @@
     
         function updateCharts(data) {
             try {
-                // Update temperature chart
                 temperatureChart.data.labels.push(data.datetime);
                 temperatureChart.data.datasets[0].data.push(data.temperature);
                 temperatureChart.update();
-    
-                // Update activity chart
                 activityChart.data.labels.push(data.datetime);
                 activityChart.data.datasets[0].data.push(data.x); 
                 activityChart.update();
@@ -491,9 +482,7 @@
         function updateAlerts(data) {
             try {
                 const alertsList = document.getElementById('alertsList');
-                alertsList.innerHTML = ''; // Clear existing alerts
-    
-                // Check for high temperature and add alert if necessary
+                alertsList.innerHTML = ''; 
                 if (data.temperature > 28) {
                     const alertItem = document.createElement('li');
                     alertItem.textContent = `Alert: Temperature has exceeded 28°C at ${data.datetime}`;
@@ -503,15 +492,9 @@
                 console.error('Error updating alerts:', error);
             }
         }
-    
-        // Initialize charts on page load
         initializeCharts();
-    
-        // Fetch data initially
         fetchData();
-    
-        // Update data periodically (e.g., every 10 seconds)
-        setInterval(fetchData, 10000); // Adjust the interval as needed
+        setInterval(fetchData, 10000); 
     </script>
     
     
